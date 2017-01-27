@@ -1,0 +1,44 @@
+---
+
+- name: clean up {{ spark_dir }} directory
+  file: 
+    path={{ spark_dir }}
+    state=absent
+  tags:
+    - packages
+    - spark
+
+- name: download spark {{ spark_version }} on hadoop
+  get_url:
+    url=http://d3kbcqa49mib13.cloudfront.net/spark-{{ spark_version }}-bin-hadoop2.7.tgz
+    dest=/tmp/spark-{{ spark_version }}-bin-hadoop2.7.tgz
+  tags:
+    - packages
+    - spark
+
+- name: unarchive spark-{{ spark_version }}-bin-hadoop2.7.tgz
+  unarchive:
+    src=/tmp/spark-{{ spark_version }}-bin-hadoop2.7.tgz
+    dest=/tmp/
+    copy=no
+  tags:
+    - packages
+    - spark
+      
+- name: move spark binaries to {{ spark_dir }} directory
+  command: mv /tmp/spark-{{ spark_version }}-bin-hadoop2.7 {{ spark_dir }}
+  tags:
+    - packages
+    - spark
+
+- name: create directories
+  file:
+    path={{ spark_dir }}/{{ item }}
+    state=directory
+    mode=0755
+  with_items:
+    - logs
+    - work
+  tags:
+    - packages
+    - spark

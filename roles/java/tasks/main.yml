@@ -1,0 +1,37 @@
+---
+
+- name: install repo for java 8
+  become: yes
+  become_user: root
+  apt_repository:
+    repo='ppa:openjdk-r/ppa'
+    state=present
+    update_cache=yes
+  tags:
+    - packages
+    - java
+
+- name: install openjdk 1.8
+  become: yes
+  become_user: root
+  apt:
+    name={{ item }}
+    state=present
+    update_cache=yes
+  with_items:
+    - openjdk-8-jdk
+  tags:
+    - packages
+    - java
+
+- name: Set JAVA_HOME if configured
+  become: yes
+  become_user: root
+  copy:
+    src: java_home.sh
+    dest: /etc/profile.d/java_home.sh
+    mode: 0644
+  tags:
+    - packages
+    - java
+

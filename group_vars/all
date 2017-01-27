@@ -1,0 +1,5 @@
+user: vagrant
+group: vagrant
+
+spark_version: "2.1.0"
+spark_dir: "{{ ansible_env.HOME }}/spark"

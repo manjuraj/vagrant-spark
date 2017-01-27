@@ -1,0 +1,6 @@
+---
+- hosts: vagrant
+  roles:
+    - role: spark
+      become: yes
+      become_user: "{{ user }}"
